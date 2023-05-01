@@ -85,7 +85,8 @@ class YOLOV7GradCAM:
         # self.model(input_img)：將input_img傳入模型中，並且得到模型的輸出
         preds, logist= self.model(input_img)
         print("[INFO] model-forward took: ", round(time.time() - tic, 4), 'seconds')
-        for 
+        for logist, cls, cls_name in zip():
+            pass
 
 
 
