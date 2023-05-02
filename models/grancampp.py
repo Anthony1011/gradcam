@@ -78,18 +78,31 @@ class YOLOV7GradCAM:
             preds: The object predictions
         """
         saliency_map = []
+        # (1, 3, 640, 640)
         b, c, h, w = input_img.size()
         # 得到當前時間 start_time = time.time()
         tic = time.time()
         # model.eval()：將模型設置為評估模式
         # self.model(input_img)：將input_img傳入模型中，並且得到模型的輸出
         preds, logist= self.model(input_img)
+        # 計算時間
         print("[INFO] model-forward took: ", round(time.time() - tic, 4), 'seconds')
-        for logist, cls, cls_name in zip():
-            pass
+        #
+        for logist, cls, cls_name in zip(logist[0], preds[1][0],preds[2][0]):
+            if class_idx:
+                score = logist[cls]
+                print(f'[INFO] class: {cls_name}, prob: {cls:.4f}')
+            else:
+                score = logist.max()
+            self.model.zero_grad()
+            tic = time.time()
+            # score.backward()：計算某一個類別的梯度
+            score.backward(retain_graph=True)
+            print(f"[INFO] {cls_name}, model-backward took: ", round(time.time() - tic, 4), 'seconds')
 
-
-
+            gradients = self.gradients['value']
+            activations = self.activations['value']
+            b, k, u, v = gradients.size()
 
 
 
